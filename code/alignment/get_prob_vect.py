@@ -3,7 +3,7 @@
 import argparse
 import torch
 from collections import defaultdict
-from transformers import BertTokenizer, AutoTokenizer, BertTokenizerFast
+from transformers import AutoTokenizer, BertTokenizerFast
 import numpy as np
 from sparsemax import Sparsemax
 import io
@@ -83,11 +83,10 @@ def renorm(x, dim):
 def main():
     params = parser.parse_args()
     print(params)
-    # src_tokenizer = BertTokenizer(params.src_vocab, do_lower_case=True)
     src_tokenizer = AutoTokenizer.from_pretrained(
         'bert-base-uncased', cache_dir='/home/georgios.vernikos/workspace/LMMT/MonoEgo/cache', use_fast=True
     )
-    tgt_tokenizer = BertTokenizerFast(vocab_file=params.tgt_vocab, do_lower_case=True)
+    tgt_tokenizer = BertTokenizerFast(vocab_file=params.tgt_vocab, do_lower_case=True, strip_accents=False)
 
     src_embs, src_subwords = get_subword_embeddings(src_tokenizer, params.src_aligned_vec, params.topn)
     tgt_embs, tgt_subwords = get_subword_embeddings(tgt_tokenizer, params.tgt_aligned_vec, params.topn)
